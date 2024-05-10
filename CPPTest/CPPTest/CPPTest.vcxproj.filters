@@ -22,6 +22,9 @@
     <Filter Include="標頭檔\Learning">
       <UniqueIdentifier>{e9bb268f-7e15-42a2-878f-35a3f123622d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{cce7449a-6032-42e2-925c-330d0837c047}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Window.cpp">
@@ -44,5 +47,16 @@
     <ClInclude Include="add.h">
       <Filter>標頭檔\Learning</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
