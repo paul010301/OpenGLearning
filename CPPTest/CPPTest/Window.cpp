@@ -7,6 +7,10 @@
 // GLFW
 #include <GLFW/glfw3.h>
 
+// SOIL
+#include <SOIL.h>
+
+// Shader
 #include "Shader.h"
 
 // Window dimensions
@@ -72,6 +76,26 @@ int main()
 	//	0, 1, 3, // 第一个三角形
 	//	1, 2, 3  // 第二个三角形
 	//};
+
+#pragma region Texture
+
+	GLfloat texCoords[] = {
+		0.0f, 0.0f, // 左下角
+		1.0f, 0.0f, // 右下角
+		0.5f, 1.0f // 上中
+	};
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+	//一个常见的错误是，将放大过滤的选项设置为多级渐远纹理过滤选项之一。这样没有任何效果，
+	//因为多级渐远纹理主要是使用在纹理被缩小的情况下的：纹理放大不会使用多级渐远纹理，
+	//为放大过滤设置多级渐远纹理的选项会产生一个GL_INVALID_ENUM错误代码。
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+
+#pragma endregion
 
 	// Vertex Buffer Objects(顶点缓冲对象)
 	GLuint VBO;
