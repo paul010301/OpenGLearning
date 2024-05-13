@@ -52,9 +52,10 @@ int main()
 	}
 
 	// Viewport init
-	int width, height;
-	glfwGetFramebufferSize(window, &width, &height);
-	glViewport(0, 0, width, height);
+	//int width, height;
+	//glfwGetFramebufferSize(window, &width, &height);
+	//glViewport(0, 0, width, height);
+	glViewport(0, 0, WIDTH, HEIGHT);
 
 	Shader ourShader("./shader.vs", "./shader.frag");
 
@@ -65,37 +66,24 @@ int main()
 	//	-0.5f, -0.5f, 0.0f, // 左下角
 	//	-0.5f, 0.5f, 0.0f   // 左上角
 	//};
-	GLfloat vertices[] = {
-		// 位置              // 颜色
-		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // 右下
-		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // 左下
-		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // 顶部
-	};
-
-	//GLuint indices[] = { // 注意索引从0开始! 
-	//	0, 1, 3, // 第一个三角形
-	//	1, 2, 3  // 第二个三角形
+	//GLfloat vertices[] = {
+	//	// 位置              // 颜色
+	//	 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // 右下
+	//	-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // 左下
+	//	 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // 顶部
 	//};
-
-#pragma region Texture
-
-	GLfloat texCoords[] = {
-		0.0f, 0.0f, // 左下角
-		1.0f, 0.0f, // 右下角
-		0.5f, 1.0f // 上中
+	GLfloat vertices[] = {
+		//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
+			0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
+			0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
+			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
+			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
 	};
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-
-	//一个常见的错误是，将放大过滤的选项设置为多级渐远纹理过滤选项之一。这样没有任何效果，
-	//因为多级渐远纹理主要是使用在纹理被缩小的情况下的：纹理放大不会使用多级渐远纹理，
-	//为放大过滤设置多级渐远纹理的选项会产生一个GL_INVALID_ENUM错误代码。
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-
-#pragma endregion
+	GLuint indices[] = { // 注意索引从0开始! 
+		0, 1, 3, // 第一个三角形
+		1, 2, 3  // 第二个三角形
+	};
 
 	// Vertex Buffer Objects(顶点缓冲对象)
 	GLuint VBO;
@@ -106,8 +94,8 @@ int main()
 	glGenVertexArrays(1, &VAO);
 
 	// Element Buffer Object(索引缓冲对象)
-	//GLuint EBO;
-	//glGenBuffers(1, &EBO);
+	GLuint EBO;
+	glGenBuffers(1, &EBO);
 
 	// ..:: 初始化代码（只运行一次 (除非你的物体频繁改变)） :: ..
 	// 1. 绑定VAO
@@ -118,18 +106,56 @@ int main()
 	// 顶点数据复制到缓冲的内存
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	// 3. 复制我们的索引数组到一个索引缓冲中，供OpenGL使用
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 	// 3. 设置顶点属性指针
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 	// 颜色属性
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
+	// 纹理属性
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
 	//4. 解绑VAO
 	glBindVertexArray(0);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+#pragma region Texture
+
+	//GLfloat texCoords[] = {
+	//	0.0f, 0.0f, // 左下角
+	//	1.0f, 0.0f, // 右下角
+	//	0.5f, 1.0f // 上中
+	//};
+
+	// Load and create a texture 
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+	// 一个常见的错误是，将放大过滤的选项设置为多级渐远纹理过滤选项之一。这样没有任何效果，
+	// 因为多级渐远纹理主要是使用在纹理被缩小的情况下的：纹理放大不会使用多级渐远纹理，
+	// 为放大过滤设置多级渐远纹理的选项会产生一个GL_INVALID_ENUM错误代码。
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// 使用SOIL加载图片，并生成纹理
+	int width, height;
+	unsigned char* image = SOIL_load_image("container2.jpeg", &width, &height, 0, SOIL_LOAD_RGB);
+
+	const char* result = SOIL_last_result();
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(image);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+#pragma endregion
 
 	GLint nrAttributes;
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
@@ -145,6 +171,9 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		// Bind Texture
+		glBindTexture(GL_TEXTURE_2D, texture);
+
 		// 记得激活着色器
 		//glUseProgram(shaderProgram);
 		ourShader.Use();
@@ -157,8 +186,8 @@ int main()
 
 		// 绘制三角形
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
 		// 交换缓冲
