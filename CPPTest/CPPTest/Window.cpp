@@ -24,9 +24,19 @@ const GLuint WIDTH = 800, HEIGHT = 600;
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
+void glm_test()
+{
+	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+	glm::mat4 trans(1.0f);
+	trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+	vec = trans * vec;
+	std::cout << vec.x << vec.y << vec.z << std::endl;
+}
+
 #if 1
 int main()
 {
+	glm_test();
 	std::cout << "Starting GLFW context, OpenGL 3.3" << std::endl;
 	// Init GLFW
 	glfwInit();
