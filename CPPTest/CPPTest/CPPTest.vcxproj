@@ -112,15 +112,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)SOIL\include;$(SolutionDir)GLFW\include;$(SolutionDir)GLEW\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)GLM;$(SolutionDir)SOIL\include;$(SolutionDir)GLFW\include;$(SolutionDir)GLEW\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)SOIL\lib;$(SolutionDir)GLFW\lib;$(SolutionDir)GLEW\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Learning|x64'">
-    <IncludePath>$(SolutionDir)SOIL\include;$(SolutionDir)GLFW\include;$(SolutionDir)GLEW\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)GLM;$(SolutionDir)SOIL\include;$(SolutionDir)GLFW\include;$(SolutionDir)GLEW\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)SOIL\lib;$(SolutionDir)GLFW\lib;$(SolutionDir)GLEW\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)SOIL\include;$(SolutionDir)GLFW\include;$(SolutionDir)GLEW\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)GLM;$(SolutionDir)SOIL\include;$(SolutionDir)GLFW\include;$(SolutionDir)GLEW\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)SOIL\lib;$(SolutionDir)GLFW\lib;$(SolutionDir)GLEW\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
